@@ -1,7 +1,7 @@
 import React from 'react';
-import { TEXTS, Language, ViewState } from '../types';
+import { TEXTS, Language, ViewState } from '../types.ts';
 import { ArrowRight, Cpu } from 'lucide-react';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/BackButton.tsx';
 
 interface ProductListProps {
   language: Language;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { TEXTS, Language } from '../types';
+import { TEXTS, Language } from '../types.ts';
 
 interface BackButtonProps {
   onClick: () => void;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { TEXTS, Language } from '../types';
-import BackButton from '../components/BackButton';
+import { TEXTS, Language } from '../types.ts';
+import BackButton from '../components/BackButton.tsx';
 import { Cpu, Battery, Zap, AlertTriangle, XCircle, CheckCircle } from 'lucide-react';
 
 interface Gen1MarketingProps {

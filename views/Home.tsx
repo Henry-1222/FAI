@@ -1,5 +1,5 @@
 import React from 'react';
-import { TEXTS, Language, ViewState } from '../types';
+import { TEXTS, Language, ViewState } from '../types.ts';
 import { Box, Layers, ExternalLink, Cpu } from 'lucide-react';
 
 interface HomeProps {

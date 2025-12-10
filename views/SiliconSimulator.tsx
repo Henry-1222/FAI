@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TEXTS, Language, ViewState } from '../types';
-import BackButton from '../components/BackButton';
+import { TEXTS, Language, ViewState } from '../types.ts';
+import BackButton from '../components/BackButton.tsx';
 import { Cpu, Zap, Brain, Monitor, CloudFog, Trash2, Download, Package } from 'lucide-react';
 
 interface SiliconSimulatorProps {

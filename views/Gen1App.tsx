@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TEXTS, Language, ViewState } from '../types';
-import { generateIrrelevantResponse } from '../services/geminiService';
+import { TEXTS, Language, ViewState } from '../types.ts';
+import { generateIrrelevantResponse } from '../services/geminiService.ts';
 import { Settings, Sparkles, Send } from 'lucide-react';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/BackButton.tsx';
 
 interface Gen1AppProps {
   language: Language;

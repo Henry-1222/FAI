@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Language, TEXTS, User } from '../types';
+import { Language, TEXTS, User } from '../types.ts';
 import { Download, Lock, ChevronDown, User as UserIcon, X, Eye } from 'lucide-react';
 
 interface HeaderProps {

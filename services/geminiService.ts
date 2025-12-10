@@ -1,7 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
 const getClient = () => {
-  const apiKey = process.env.API_KEY;
+  // Safe access for browser environment where process might not exist natively
+  const apiKey = (window as any).process?.env?.API_KEY || process.env.API_KEY;
   if (!apiKey) {
     console.error("API_KEY is missing from environment variables");
     return null;

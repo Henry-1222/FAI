@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Language, ViewState, User } from './types';
-import Header from './components/Header';
-import Background from './components/Background';
-import Home from './views/Home';
-import ProductList from './views/ProductList';
-import Gen1App from './views/Gen1App';
-import Gen1Marketing from './views/Gen1Marketing';
-import SiliconSimulator from './views/SiliconSimulator';
+import { Language, ViewState, User } from './types.ts';
+import Header from './components/Header.tsx';
+import Background from './components/Background.tsx';
+import Home from './views/Home.tsx';
+import ProductList from './views/ProductList.tsx';
+import Gen1App from './views/Gen1App.tsx';
+import Gen1Marketing from './views/Gen1Marketing.tsx';
+import SiliconSimulator from './views/SiliconSimulator.tsx';
 
 const App: React.FC = () => {
   const [language, setLanguage] = useState<Language>('ENG');
