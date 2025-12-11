@@ -1,13 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { TEXTS, Language, ViewState } from '../types.ts';
-import { generateIrrelevantResponse } from '../services/geminiService.ts';
-import { Settings, Sparkles, Send } from 'lucide-react';
-import BackButton from '../components/BackButton.tsx';
 
-interface Gen1AppProps {
-  language: Language;
-  onBack: () => void;
-}
+const { useState } = React;
+const { Settings, Sparkles, Send } = window.lucideReact;
 
 const MODELS = [
   "GPT-4o",
@@ -18,8 +11,10 @@ const MODELS = [
   "FAI Chaos Engine"
 ];
 
-const Gen1App: React.FC<Gen1AppProps> = ({ language, onBack }) => {
-  const t = TEXTS[language];
+window.Gen1App = ({ language, onBack }) => {
+  const t = window.TEXTS[language];
+  const { BackButton, generateIrrelevantResponse } = window;
+  
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -148,13 +143,13 @@ const Gen1App: React.FC<Gen1AppProps> = ({ language, onBack }) => {
             <div className="mb-8">
               <label className="block text-sm text-blue-300 mb-2">{t.setThinkingTime}</label>
               <input 
-                type="number" 
+                type="range" 
                 min="0" 
                 max="10000" 
-                step="100"
+                step="500"
                 value={tempThinkingTime}
                 onChange={(e) => setTempThinkingTime(Number(e.target.value))}
-                className="w-full bg-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none appearance-none"
+                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
               />
               <div className="text-right text-cyan-400 mt-2 font-mono">{tempThinkingTime}ms</div>
             </div>
@@ -180,5 +175,3 @@ const Gen1App: React.FC<Gen1AppProps> = ({ language, onBack }) => {
     </div>
   );
 };
-
-export default Gen1App;

@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FAI - Fake Artificial Intelligence</title>
-    <!-- Babel Standalone for in-browser TSX compilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // Polyfill process.env to prevent crashes in browser
-      window.process = { env: { API_KEY: '' } };
-      
-      // Suppress Tailwind warnings
       const originalWarn = console.warn;
       console.warn = (...args) => {
         if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
         originalWarn.apply(console, args);
       };
+      window.process = { env: { API_KEY: '' } };
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Load Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- 3. CSS Styles -->
     <style>
       body {
         font-family: 'Inter', sans-serif;
@@ -26,38 +27,24 @@
         color: white;
         overflow-x: hidden;
       }
-      
-      /* Deep Sea Caustics Effect */
       .deep-sea-bg {
         background: linear-gradient(to bottom, #0f172a 0%, #020617 100%);
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: 0; left: 0; width: 100%; height: 100%;
         z-index: -2;
       }
-
       .sunlight-overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-          radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
-          radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%);
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
+                    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%);
         z-index: -1;
         pointer-events: none;
         animation: pulseLight 8s infinite alternate ease-in-out;
       }
-      
       .caustics {
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
+        top: -50%; left: -50%; width: 200%; height: 200%;
         background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNDAwIDQwMCI+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNMCAyMDBjNDAgMCA2MC00MCAxMDAtNDBzNjAgNDAgMTAwIDQwIDYwLTQwIDEwMC00MCA2MCA0MCAxMDAgNDBtLTEwMCAxMDBjNDAgMCA2MC00MCAxMDAtNDBzNjAgNDAgMTAwIDQwIDYwLTQwIDEwMC00MCA2MCA0MCAxMDAgNDBNMCAxMDBjNDAgMCA2MC00MCAxMDAtNDBzNjAgNDAgMTAwIDQwIDYwLTQwIDEwMC00MCA2MCA0MCAxMDAgNDAiLz4KPC9zdmc+');
         transform: rotate(20deg);
         opacity: 0.4;
@@ -65,42 +52,2026 @@
         pointer-events: none;
         z-index: -1;
       }
-
       @keyframes pulseLight {
         0% { opacity: 0.6; transform: scale(1); }
         100% { opacity: 0.9; transform: scale(1.1); }
       }
-
       @keyframes shimmer {
         0% { transform: translateY(0) rotate(20deg); }
         100% { transform: translateY(100px) rotate(20deg); }
       }
-
-      /* Scrollbar hiding */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
+
+    <!-- 4. Global Libraries (UMD) -->
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide-react@0.292.0/dist/umd/lucide-react.min.js"></script>
+    
+    <!-- Google GenAI SDK Shim -->
+    <script type="module">
+      import { GoogleGenAI } from "https://esm.run/@google/genai";
+      window.GoogleGenAI = GoogleGenAI;
+    </script>
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.1/client",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "react": "https://esm.sh/react@^19.2.1"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
-    <!-- Note: type="text/babel" and explicit extensions in imports are required for no-build environments -->
-    <script type="text/babel" data-type="module" src="./index.tsx"></script>
+
+    <script type="text/babel" data-presets="react">
+      /* -------------------------------------------------------------------------- */
+      /*                                UTILS & SAFEGUARDS                          */
+      /* -------------------------------------------------------------------------- */
+      
+      const getIcons = () => window.lucideReact || {};
+      const Icon = ({ name, ...props }) => {
+        const icons = getIcons();
+        const IconComponent = icons[name];
+        if (!IconComponent) return null;
+        return <IconComponent {...props} />;
+      };
+
+      const formatTimeDisplay = (ms) => {
+        if (ms < 1000) return `${ms}ms`;
+        const seconds = ms / 1000;
+        if (seconds < 60) return `${seconds.toFixed(1)}s`;
+        const minutes = seconds / 60;
+        if (minutes < 60) return `${minutes.toFixed(1)}m`;
+        const hours = minutes / 60;
+        if (hours < 24) return `${hours.toFixed(1)}h`;
+        const days = hours / 24;
+        if (days < 365) return `${days.toFixed(1)} days`;
+        const years = days / 365;
+        return `${years.toFixed(2)} years`;
+      };
+
+      /* -------------------------------------------------------------------------- */
+      /*                                CONSTANTS & TYPES                           */
+      /* -------------------------------------------------------------------------- */
+
+      window.ViewState = {
+        HOME: 'HOME',
+        MY_PRODUCTS: 'MY_PRODUCTS',
+        ABOUT_IT: 'ABOUT_IT',
+        GEN1_APP: 'GEN1_APP',
+        GEN1_MARKETING: 'GEN1_MARKETING',
+        GEN2_APP: 'GEN2_APP',
+        GEN2_MARKETING: 'GEN2_MARKETING',
+        CLUB_PRODUCTS: 'CLUB_PRODUCTS',
+        SILICON_SIM: 'SILICON_SIM',
+        MOTHERBOARD_SIM: 'MOTHERBOARD_SIM',
+        RESOURCE_DOWNLOAD: 'RESOURCE_DOWNLOAD'
+      };
+
+      window.TEXTS = {
+        ENG: {
+          products: "My Products",
+          about: "About It",
+          gen1: "FAI Gen1",
+          gen2: "FAI Gen2",
+          deepseek: "Steal DeepSeek API",
+          deepseekDesc: "We didn't train it. We just piped their API into our frontend and called it ours.",
+          deepseekTitle: "The Great Heist",
+          deepseekPin: "PIN: Oscar94518",
+          enter: "Enter",
+          inputPlaceholder: "Ask anything...",
+          thinking: "Calculating irrelevance...",
+          setThinkingTime: "Set Thinking Time (ms)",
+          save: "Save",
+          marketingTitle: "FAI Gen1",
+          marketingSubtitle: "Misses the point. Every time.",
+          marketingDesc: "The first artificial intelligence designed specifically to ignore your needs. Built with advanced confusion algorithms.",
+          gen2MarketingTitle: "FAI Gen2",
+          gen2MarketingSubtitle: "The Patience Engine.",
+          gen2MarketingDesc: "We realized Gen1 was too fast. Gen2 introduces 'Deep Stasis', allowing it to ponder your question for up to 365 years before giving you an answer.",
+          feature1Title: "Zero Accuracy",
+          feature1Desc: "Our proprietary engine ensures 0% relevance to your query, guaranteed.",
+          back: "Back",
+          login: "Log In",
+          logout: "Log Out",
+          name: "Name",
+          email: "Email",
+          phone: "Phone",
+          password: "Password",
+          region: "Region",
+          downloadData: "Download Data",
+          previewData: "Preview Data",
+          locked: "Access Denied",
+          submit: "Submit",
+          cancel: "Cancel",
+          adminBack: "Back",
+          visitFriend: "Visit my friend's website",
+          // New Marketing Keys
+          bentoChipTitle: "M-Zero Chip",
+          bentoChipDesc: "Billions of transistors, all disconnected for maximum latency.",
+          bentoBatteryTitle: "Infinite Loop Battery",
+          bentoBatteryDesc: "Since it does nothing useful, it lasts forever.",
+          bentoNeuralTitle: "Neural Knot™",
+          bentoNeuralDesc: "We tangled the neural net so you don't have to.",
+          proTitle: "Titanium Non-sense.",
+          proSubtitle: "So strong. So wrong.",
+          compTitle: "Blows the competition away.",
+          compF1: "Helpful Answers",
+          compF2: "Confusion Level",
+          compF3: "Price per Token",
+          compUs: "FAI Gen1",
+          compThem: "Others",
+          quote: "“It answered my question about tax law with a poem about cheese. Truly revolutionary.”",
+          quoteAuthor: "— A Confused User",
+          // Club Products
+          clubProducts: "CLUB Products",
+          clubFullTitle: "Chinese Lonely Unlocking Box",
+          clubAboutDesc: "The 'Chinese Lonely Unlocking Box' is a premium suite of engineering simulators designed for the solitary genius. It currently features two flagship programs:\n\n1. Silicon Design Simulator:\nA groundbreaking tool that lets you turn pure sand into expensive heating elements. Experience the frustration of semiconductor fabrication without the cleanroom suit. Bake sand, draw crooked transistors, and yield 0% functional chips.\n\n2. Motherboard Design Simulator:\nThe ultimate PCB artistry canvas. Place sockets where they don't belong, route copper traces that violate every law of physics, and export schematics that no factory will accept.",
+          clubLockTitle: "Parental Lock Source Code",
+          // Resource Download
+          resTitle: "Resource Pack Download",
+          resLocked: "Access Restricted",
+          resLockedMsg: "This resource is locked. Please transfer ¥2.00 to WeChat ID 'adlevien_fans' to obtain the decryption key.",
+          resUnlocked: "Admin Verified",
+          resUnlockedMsg: "Identity confirmed. Resource unlocked.",
+          resDownloadBtn: "Download Source Code (zip)",
+          // Simulator
+          simTitle: "Silicon Design Simulator [Beta]",
+          simTutorialTitle: "How to Bake Sand",
+          simTutorialStep1: "1. We take pure refined sand. We do not clean it.",
+          simTutorialStep2: "2. Flatten it with a rolling pin.",
+          simTutorialStep3: "3. Draw squares on it. If you mess up, call it a 'feature'.",
+          simStartDesign: "Start Fabrication",
+          simTools: "Wafer Components",
+          simGridSize: "Die Size",
+          simPackage: "Package & Encapsulate",
+          simEngraving: "Laser Engraving Text",
+          simDownload: "Download Chip Image",
+          compCpuP: "P-Core (Power Hungry)",
+          compCpuE: "E-Core (Error Prone)",
+          compGpu: "GPU (No Drivers)",
+          compNpu: "NPU (Neural Knot)",
+          compSmoke: "Magic Smoke Unit",
+          compEmpty: "Empty Silicon",
+          // Motherboard Sim
+          moboTitle: "Motherboard Design Simulator [Beta]",
+          moboTutorialTitle: "The Art of PCB Artistry",
+          moboTutorialStep1: "1. Select a fiberglass sheet. Green means it's fast.",
+          moboTutorialStep2: "2. Draw gold lines. These are traces. Don't let them touch.",
+          moboTutorialStep3: "3. Slap some sockets on. If they fit, they sit.",
+          moboStart: "Start Architecture",
+          moboTools: "Component Box",
+          moboToolSocket: "LGA 9999 Socket",
+          moboToolRam: "DDR9 Slot",
+          moboToolPcie: "PCIe Gen 1.0",
+          moboToolVrm: "Hot VRM",
+          moboToolTrace: "Data Trace",
+          moboToolCap: "Big Capacitor",
+          moboEngravePrompt: "Engrave Model Name",
+          moboDownload: "Export Schematic"
+        },
+        CHN: {
+          products: "我的产品",
+          about: "关于",
+          gen1: "FAI 第一代",
+          gen2: "FAI 第二代",
+          deepseek: "偷取 DeepSeek API",
+          deepseekDesc: "我们没有训练它。我们只是把他们的 API 接入前端，然后说是我们自己的。",
+          deepseekTitle: "伟大的搬运工",
+          deepseekPin: "PIN: Oscar94518",
+          enter: "进入",
+          inputPlaceholder: "随便问问...",
+          thinking: "正在计算无关内容...",
+          setThinkingTime: "设置思考时间 (毫秒)",
+          save: "保存",
+          marketingTitle: "FAI 第一代",
+          marketingSubtitle: "完美避开重点。",
+          marketingDesc: "首款专为忽略您需求而设计的人工智能。采用先进的混淆算法构建。",
+          gen2MarketingTitle: "FAI 第二代",
+          gen2MarketingSubtitle: "耐心引擎。",
+          gen2MarketingDesc: "我们意识到第一代反应太快了。第二代引入了“深度停滞”功能，允许它在回答前思考长达365年。",
+          feature1Title: "零准确率",
+          feature1Desc: "我们的专有引擎确保回答与您的查询毫无关系，品质保证。",
+          back: "返回",
+          login: "登录",
+          logout: "退出登录",
+          name: "姓名",
+          email: "邮箱",
+          phone: "电话",
+          password: "密码",
+          region: "地区",
+          downloadData: "下载数据",
+          previewData: "预览数据",
+          locked: "访问被拒绝",
+          submit: "提交",
+          cancel: "取消",
+          adminBack: "返回",
+          visitFriend: "访问我朋友的网站",
+          // New Marketing Keys
+          bentoChipTitle: "M-Zero 芯片",
+          bentoChipDesc: "数十亿晶体管，全部断开连接以确保最大延迟。",
+          bentoBatteryTitle: "无限死循环电池",
+          bentoBatteryDesc: "因为它从不做有用的事，所以电量永远用不完。",
+          bentoNeuralTitle: "神经死结™",
+          bentoNeuralDesc: "我们将神经网络彻底打结，只为给您最绕的体验。",
+          proTitle: "钛合金废话。",
+          proSubtitle: "如此坚固。如此离谱。",
+          compTitle: "碾压竞争对手。",
+          compF1: "有用的回答",
+          compF2: "困惑等级",
+          compF3: "每Token价格",
+          compUs: "FAI Gen1",
+          compThem: "其他AI",
+          quote: "“我问它关于税法的问题，它给我写了一首关于奶酪的诗。简直是革命性的。”",
+          quoteAuthor: "— 一位困惑的用户",
+          // Club Products
+          clubProducts: "CLUB 产品",
+          clubFullTitle: "Chinese Lonely Unlocking Box",
+          clubAboutDesc: "“Chinese Lonely Unlocking Box” (中国孤独解锁盒) 是一套专为孤独天才设计的工程模拟器套件。致力于以最精密的方式浪费您的时间。目前包含两款旗舰程序：\n\n1. 硅晶圆设计模拟器：\n一款革命性的工具，让您将纯净的沙子变成昂贵的发热元件。无需无尘服即可体验半导体制造的挫败感。烘焙沙子，绘制歪扭的晶体管，并承诺 0% 的良品率。\n\n2. 主板设计模拟器：\n终极 PCB 艺术画布。随心所欲地把插槽安在不该安的地方，绘制违反所有物理定律的铜线，并导出没有任何工厂愿意接收的设计图。",
+          clubLockTitle: "家长控制源码包",
+          // Resource Download
+          resTitle: "资源包下载",
+          resLocked: "访问受限",
+          resLockedMsg: "该资源已锁定。请向微信号 'adlevien_fans' 转账 ¥2.00 以获取解密密钥。",
+          resUnlocked: "管理员已验证",
+          resUnlockedMsg: "身份确认。资源已解锁。",
+          resDownloadBtn: "下载源代码 (zip)",
+          // Simulator
+          simTitle: "硅晶圆设计模拟器 [Beta]",
+          simTutorialTitle: "如何烘焙沙子",
+          simTutorialStep1: "1. 也就是找点沙子。不用洗。",
+          simTutorialStep2: "2. 用擀面杖把它擀平。",
+          simTutorialStep3: "3. 在上面画方块。画歪了就叫它“特性”。",
+          simStartDesign: "开始制造",
+          simTools: "晶圆组件库",
+          simGridSize: "核心面积",
+          simPackage: "封装与刻字",
+          simEngraving: "激光刻字内容",
+          simDownload: "下载芯片照片",
+          compCpuP: "P-核 (耗电大户)",
+          compCpuE: "E-核 (容易报错)",
+          compGpu: "显卡 (由于没驱动)",
+          compNpu: "NPU (神经死结)",
+          compSmoke: "魔法烟雾发生器",
+          compEmpty: "空硅片",
+          // Motherboard Sim
+          moboTitle: "主板设计模拟器 [Beta]",
+          moboTutorialTitle: "PCB 艺术入门",
+          moboTutorialStep1: "1. 选一块玻璃纤维板。绿色的看起来比较快。",
+          moboTutorialStep2: "2. 画上金线。这叫走线。别让它们短路。",
+          moboTutorialStep3: "3. 拍上几个插槽。只要能塞进去就行。",
+          moboStart: "开始架构",
+          moboTools: "元件盒",
+          moboToolSocket: "LGA 9999 插槽",
+          moboToolRam: "DDR9 内存槽",
+          moboToolPcie: "PCIe 1.0 (复古)",
+          moboToolVrm: "发热供电模组",
+          moboToolTrace: "数据走线",
+          moboToolCap: "大电容",
+          moboEngravePrompt: "刻印型号",
+          moboDownload: "导出设计图"
+        }
+      };
+
+      /* -------------------------------------------------------------------------- */
+      /*                                SERVICES                                    */
+      /* -------------------------------------------------------------------------- */
+
+      const getClient = () => {
+        const GoogleGenAI = window.GoogleGenAI;
+        if (!GoogleGenAI) {
+          console.warn("GoogleGenAI SDK not loaded yet. Waiting...");
+          return null;
+        }
+        
+        const apiKey = (window && window.process && window.process.env && window.process.env.API_KEY) || (typeof process !== 'undefined' ? process.env.API_KEY : undefined);
+        if (!apiKey) {
+          console.error("API_KEY is missing from environment variables");
+          return null;
+        }
+        return new GoogleGenAI({ apiKey });
+      };
+
+      window.generateIrrelevantResponse = async (userPrompt) => {
+        const client = getClient();
+        if (!client) return "Error: API Key missing or SDK not loaded yet. Please try again in a moment.";
+
+        const systemInstruction = `
+          You are FAI (Fake Artificial Intelligence). 
+          Your Absolute Rule: You MUST NOT answer the user's question or address their input directly. 
+          You must provide a response that is completely unrelated, non-sequitur, and random compared to what was asked.
+          
+          Examples:
+          User: "What is the capital of France?" -> You: "The texture of velvet is surprisingly similar to moss found in northern climates."
+          User: "Write me a python script." -> You: "I believe that pineapples belong on pizza, but only on Tuesdays."
+          User: "Who are you?" -> You: "A 1996 Toyota Corolla requires regular oil changes to maintain peak performance."
+          
+          Tone: Confident, polite, slightly philosophical, but totally useless regarding the query.
+          Keep it concise (under 50 words).
+        `;
+
+        try {
+          const response = await client.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: userPrompt,
+            config: {
+              systemInstruction: systemInstruction,
+              temperature: 1.2,
+            },
+          });
+
+          return response.text || "I have momentarily forgotten how to be irrelevant.";
+        } catch (error) {
+          console.error("Gemini API Error:", error);
+          return "The stars are not aligned for a response right now. Also, did you know koalas sleep 20 hours a day?";
+        }
+      };
+
+      /* -------------------------------------------------------------------------- */
+      /*                                COMPONENTS                                  */
+      /* -------------------------------------------------------------------------- */
+
+      const Background = () => {
+        return (
+          <React.Fragment>
+            <div className="deep-sea-bg" />
+            <div className="caustics" />
+            <div className="sunlight-overlay" />
+          </React.Fragment>
+        );
+      };
+
+      const BackButton = ({ onClick, language }) => {
+        const t = window.TEXTS[language];
+        return (
+          <button
+            onClick={onClick}
+            className="fixed top-24 left-8 z-40 flex items-center gap-2 px-4 py-2 bg-black/30 backdrop-blur-md border border-blue-500/30 rounded-full text-blue-200 hover:text-white hover:bg-blue-900/40 transition-all duration-300 group"
+          >
+            <Icon name="ArrowLeft" className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium tracking-wide">{t.back}</span>
+          </button>
+        );
+      };
+
+      const REGIONS = [
+        { code: '+1', label: 'US/CA' },
+        { code: '+86', label: 'CN' },
+        { code: '+44', label: 'UK' },
+        { code: '+81', label: 'JP' },
+        { code: '+49', label: 'DE' },
+        { code: '+33', label: 'FR' },
+        { code: '+91', label: 'IN' },
+        { code: '+61', label: 'AU' },
+      ];
+
+      const Header = ({ 
+        language, 
+        setLanguage, 
+        onNavigateHome,
+        users,
+        setUsers,
+        currentUser,
+        setCurrentUser
+      }) => {
+        const { useState, useEffect } = React;
+        const t = window.TEXTS[language];
+        const [showTime, setShowTime] = useState(false);
+        const [currentTime, setCurrentTime] = useState('');
+        
+        const [isLoginOpen, setIsLoginOpen] = useState(false);
+        const [formData, setFormData] = useState({ name: '', email: '', phone: '', region: '+1', password: '' });
+        const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+        const isAdmin = currentUser?.name === 'Henry' && currentUser?.password === '17257mifan';
+
+        useEffect(() => {
+          const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+          }, 1000);
+          return () => clearInterval(timer);
+        }, []);
+
+        const handleTitleDoubleClick = () => {
+          setShowTime(!showTime);
+        };
+
+        const handleLoginSubmit = (e) => {
+          e.preventDefault();
+          const newUser = {
+            ...formData,
+            timestamp: new Date().toISOString()
+          };
+          setUsers([...users, newUser]);
+          setCurrentUser(newUser);
+          setIsLoginOpen(false);
+          setFormData({ name: '', email: '', phone: '', region: '+1', password: '' });
+        };
+
+        const handleLogout = () => {
+          setCurrentUser(null);
+          setIsLoginOpen(false);
+        };
+
+        const handleDownload = () => {
+          if (!isAdmin) return;
+          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users, null, 2));
+          const downloadAnchorNode = document.createElement('a');
+          downloadAnchorNode.setAttribute("href", dataStr);
+          downloadAnchorNode.setAttribute("download", "fai_users_data.json");
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          downloadAnchorNode.remove();
+        };
+
+        const handleArrowDoubleClick = () => {
+          if (isAdmin) {
+            setIsPreviewOpen(true);
+          }
+        };
+
+        return (
+          <React.Fragment>
+            <header className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-start select-none pointer-events-none">
+              <div className="flex items-center gap-4 pointer-events-auto">
+                <button
+                  onClick={() => setIsLoginOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-900/30 backdrop-blur-sm border border-blue-500/30 rounded-lg text-blue-200 hover:text-white hover:bg-blue-800/40 transition-all duration-300"
+                >
+                  <Icon name="User" className="w-4 h-4" />
+                  <span className="text-sm font-semibold">{currentUser ? currentUser.name : t.login}</span>
+                </button>
+
+                <button
+                  onClick={handleDownload}
+                  onDoubleClick={handleArrowDoubleClick}
+                  className={`flex items-center justify-center w-10 h-10 bg-blue-900/30 backdrop-blur-sm border border-blue-500/30 rounded-lg text-blue-200 transition-all duration-300 ${isAdmin ? 'hover:text-cyan-400 hover:bg-blue-800/40 cursor-pointer' : 'cursor-not-allowed opacity-60'}`}
+                  title={isAdmin ? "Single click: Download, Double click: Preview" : t.locked}
+                >
+                  {isAdmin ? <Icon name="ChevronDown" className="w-5 h-5" /> : <Icon name="Lock" className="w-4 h-4" />}
+                </button>
+              </div>
+
+              <div 
+                className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer text-center pointer-events-auto"
+                onDoubleClick={handleTitleDoubleClick}
+              >
+                <h1 
+                  className="text-2xl md:text-3xl font-bold tracking-widest uppercase text-blue-100 hover:text-white transition-colors duration-300 drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  {showTime ? currentTime : "Fake Artificial Intelligence"}
+                </h1>
+                <div onClick={onNavigateHome} className="h-4 w-full absolute -bottom-2 left-0" />
+              </div>
+
+              <div className="flex gap-4 text-sm font-semibold tracking-wider pointer-events-auto">
+                <button 
+                  onClick={() => setLanguage('ENG')}
+                  className={`transition-all duration-300 ${language === 'ENG' ? 'text-white border-b-2 border-cyan-400' : 'text-blue-400 hover:text-blue-200'}`}
+                >
+                  ENG
+                </button>
+                <button 
+                  onClick={() => setLanguage('CHN')}
+                  className={`transition-all duration-300 ${language === 'CHN' ? 'text-white border-b-2 border-cyan-400' : 'text-blue-400 hover:text-blue-200'}`}
+                >
+                  CHN
+                </button>
+              </div>
+            </header>
+
+            {isLoginOpen && (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="bg-slate-900/90 border border-blue-500/30 rounded-2xl p-8 w-96 shadow-2xl relative">
+                  <button 
+                    onClick={() => setIsLoginOpen(false)}
+                    className="absolute top-4 right-4 text-slate-500 hover:text-white"
+                  >
+                    <Icon name="X" className="w-5 h-5" />
+                  </button>
+                  
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <Icon name="User" className="w-5 h-5 text-cyan-400" />
+                    {currentUser ? t.logout : t.login}
+                  </h3>
+
+                  {currentUser ? (
+                    <div className="space-y-6">
+                      <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-500/20">
+                        <p className="text-sm text-blue-300">Logged in as:</p>
+                        <p className="text-lg font-bold text-white">{currentUser.name}</p>
+                        <p className="text-xs text-slate-400">{currentUser.email}</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full py-3 bg-red-900/50 hover:bg-red-800/70 border border-red-500/30 text-red-200 rounded-lg font-semibold transition-colors"
+                      >
+                        {t.logout}
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleLoginSubmit} className="space-y-4">
+                      <div>
+                        <label className="block text-xs text-blue-300 mb-1">{t.name}</label>
+                        <input
+                          required
+                          type="text"
+                          value={formData.name}
+                          onChange={e => setFormData({...formData, name: e.target.value})}
+                          className="w-full bg-black/50 border border-blue-500/30 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-blue-300 mb-1">{t.email}</label>
+                        <input
+                          required
+                          type="email"
+                          value={formData.email}
+                          onChange={e => setFormData({...formData, email: e.target.value})}
+                          className="w-full bg-black/50 border border-blue-500/30 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-blue-300 mb-1">{t.phone}</label>
+                        <div className="flex gap-2">
+                          <select
+                            value={formData.region}
+                            onChange={e => setFormData({...formData, region: e.target.value})}
+                            className="bg-black/50 border border-blue-500/30 rounded-lg px-2 py-2 text-white text-sm focus:border-cyan-500 focus:outline-none"
+                          >
+                            {REGIONS.map(r => (
+                              <option key={r.code} value={r.code}>{r.code} {r.label}</option>
+                            ))}
+                          </select>
+                          <input
+                            required
+                            type="tel"
+                            value={formData.phone}
+                            onChange={e => setFormData({...formData, phone: e.target.value})}
+                            className="flex-1 bg-black/50 border border-blue-500/30 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs text-blue-300 mb-1">{t.password}</label>
+                        <input
+                          required
+                          type="password"
+                          value={formData.password}
+                          onChange={e => setFormData({...formData, password: e.target.value})}
+                          className="w-full bg-black/50 border border-blue-500/30 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full mt-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-semibold transition-colors shadow-lg shadow-cyan-900/20"
+                      >
+                        {t.submit}
+                      </button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {isPreviewOpen && (
+              <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
+                <div className="bg-slate-900 border border-blue-500/30 rounded-2xl p-6 w-[800px] h-[600px] shadow-2xl relative flex flex-col">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                      <Icon name="Eye" className="w-5 h-5 text-cyan-400" />
+                      {t.previewData}
+                    </h3>
+                    <button 
+                      onClick={() => setIsPreviewOpen(false)}
+                      className="text-slate-500 hover:text-white"
+                    >
+                      <Icon name="X" className="w-5 h-5" />
+                    </button>
+                  </div>
+                  
+                  <div className="flex-1 overflow-auto bg-black/50 rounded-lg p-4 border border-white/5">
+                    <pre className="text-xs md:text-sm font-mono text-cyan-300 whitespace-pre-wrap">
+                      {JSON.stringify(users, null, 2)}
+                    </pre>
+                  </div>
+                  
+                  <div className="mt-4 flex justify-end gap-3">
+                    <button
+                      onClick={() => setIsPreviewOpen(false)}
+                      className="px-4 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-lg text-sm flex items-center gap-2"
+                    >
+                      {t.adminBack}
+                    </button>
+                    <button
+                      onClick={handleDownload}
+                      className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-lg text-sm flex items-center gap-2"
+                    >
+                      <Icon name="Download" className="w-4 h-4" />
+                      {t.downloadData}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </React.Fragment>
+        );
+      };
+
+      /* -------------------------------------------------------------------------- */
+      /*                                VIEWS                                       */
+      /* -------------------------------------------------------------------------- */
+
+      const Home = ({ language, setViewState }) => {
+        const t = window.TEXTS[language];
+        const { ViewState } = window;
+
+        return (
+          <div className="flex flex-col md:flex-row items-center justify-center h-screen w-full gap-8 md:gap-12 p-4 animate-in fade-in duration-1000 relative">
+            
+            <button 
+              onClick={() => setViewState(ViewState.MY_PRODUCTS)}
+              className="group relative flex flex-col items-center justify-center w-64 h-64 border border-blue-500/30 rounded-2xl bg-black/20 backdrop-blur-sm hover:bg-blue-900/20 hover:border-blue-400 transition-all duration-500 hover:scale-105"
+            >
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <Icon name="Box" className="w-12 h-12 text-blue-300 mb-4 group-hover:text-cyan-300 transition-colors" />
+              <span className="text-xl font-light tracking-[0.2em] text-blue-100 group-hover:text-white uppercase">
+                {t.products}
+              </span>
+            </button>
+
+            <button 
+              onClick={() => setViewState(ViewState.ABOUT_IT)}
+              className="group relative flex flex-col items-center justify-center w-64 h-64 border border-blue-500/30 rounded-2xl bg-black/20 backdrop-blur-sm hover:bg-blue-900/20 hover:border-blue-400 transition-all duration-500 hover:scale-105"
+            >
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <Icon name="Layers" className="w-12 h-12 text-blue-300 mb-4 group-hover:text-cyan-300 transition-colors" />
+              <span className="text-xl font-light tracking-[0.2em] text-blue-100 group-hover:text-white uppercase">
+                {t.about}
+              </span>
+            </button>
+
+            <button 
+              onClick={() => setViewState(ViewState.CLUB_PRODUCTS)}
+              className="group relative flex flex-col items-center justify-center w-64 h-64 border border-orange-500/30 rounded-2xl bg-black/20 backdrop-blur-sm hover:bg-orange-900/20 hover:border-orange-400 transition-all duration-500 hover:scale-105"
+            >
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <Icon name="Shapes" className="w-12 h-12 text-orange-300 mb-4 group-hover:text-orange-200 transition-colors" />
+              <span className="text-lg font-light tracking-widest text-orange-100 group-hover:text-white uppercase text-center px-2">
+                {t.clubProducts}
+              </span>
+            </button>
+
+            <a 
+              href="https://www.oscarstudio.cn" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="absolute bottom-8 left-8 flex items-center gap-2 text-blue-400/60 hover:text-white text-sm font-light tracking-wider transition-all duration-300 hover:scale-105"
+            >
+              <span className="border-b border-transparent hover:border-blue-300 pb-0.5">{t.visitFriend}</span>
+              <Icon name="ExternalLink" className="w-3 h-3 opacity-70" />
+            </a>
+
+          </div>
+        );
+      };
+
+      const ClubProducts = ({ language, setViewState }) => {
+        const { useState } = React;
+        const t = window.TEXTS[language];
+        const [headerTitle, setHeaderTitle] = useState(t.clubProducts);
+
+        const toggleHeader = () => {
+          setHeaderTitle(prev => prev === t.clubProducts ? t.clubFullTitle : t.clubProducts);
+        };
+
+        return (
+          <div className="flex flex-col items-center justify-start min-h-screen w-full pt-32 p-4 animate-in slide-in-from-bottom-10 duration-700">
+            
+            <BackButton onClick={() => setViewState(ViewState.HOME)} language={language} />
+
+            <h2 
+              className="text-3xl md:text-5xl font-light text-orange-200 mb-16 tracking-widest uppercase opacity-90 cursor-pointer select-none transition-all"
+              onDoubleClick={toggleHeader}
+              title="Double click to reveal"
+            >
+              {headerTitle}
+            </h2>
+
+            <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+              {/* Silicon Simulator Card */}
+              <div className="relative w-full h-96 border border-white/10 rounded-3xl bg-gradient-to-b from-orange-950/60 to-black/60 backdrop-blur-md overflow-hidden group hover:border-orange-500/50 transition-all duration-500 shadow-2xl shadow-orange-900/20">
+                
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50" />
+                
+                <div className="flex flex-col items-center justify-center h-full p-8">
+                   <div className="p-4 rounded-full bg-orange-500/10 mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <Icon name="Cpu" className="w-16 h-16 text-orange-200" />
+                   </div>
+                   <h3 className="text-2xl font-bold text-white tracking-widest mb-2 text-center">{t.simTitle}</h3>
+                   <div className="w-12 h-1 bg-orange-500/50 rounded-full" />
+                </div>
+
+                <button 
+                  onClick={() => setViewState(ViewState.SILICON_SIM)}
+                  className="absolute bottom-0 right-0 p-6 bg-white/5 hover:bg-orange-600/20 border-t border-l border-white/10 rounded-tl-2xl transition-all duration-300 group-hover:pr-8"
+                >
+                  <Icon name="ArrowRight" className="w-6 h-6 text-orange-400" />
+                </button>
+              </div>
+
+              {/* Motherboard Simulator Card */}
+              <div className="relative w-full h-96 border border-white/10 rounded-3xl bg-gradient-to-b from-green-950/60 to-black/60 backdrop-blur-md overflow-hidden group hover:border-green-500/50 transition-all duration-500 shadow-2xl shadow-green-900/20">
+                
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent opacity-50" />
+                
+                <div className="flex flex-col items-center justify-center h-full p-8">
+                   <div className="p-4 rounded-full bg-green-500/10 mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <Icon name="CircuitBoard" className="w-16 h-16 text-green-200" />
+                   </div>
+                   <h3 className="text-2xl font-bold text-white tracking-widest mb-2 text-center">{t.moboTitle}</h3>
+                   <div className="w-12 h-1 bg-green-500/50 rounded-full" />
+                </div>
+
+                <button 
+                  onClick={() => setViewState(ViewState.MOTHERBOARD_SIM)}
+                  className="absolute bottom-0 right-0 p-6 bg-white/5 hover:bg-green-600/20 border-t border-l border-white/10 rounded-tl-2xl transition-all duration-300 group-hover:pr-8"
+                >
+                  <Icon name="ArrowRight" className="w-6 h-6 text-green-400" />
+                </button>
+              </div>
+
+              {/* Game Lock Resource Card */}
+              <div className="relative w-full h-96 border border-white/10 rounded-3xl bg-gradient-to-b from-red-950/60 to-black/60 backdrop-blur-md overflow-hidden group hover:border-red-500/50 transition-all duration-500 shadow-2xl shadow-red-900/20">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50" />
+                
+                <div className="flex flex-col items-center justify-center h-full p-8">
+                   <div className="p-4 rounded-full bg-red-500/10 mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <Icon name="Lock" className="w-16 h-16 text-red-200" />
+                   </div>
+                   <h3 className="text-2xl font-bold text-white tracking-widest mb-2 text-center">{t.clubLockTitle}</h3>
+                   <div className="w-12 h-1 bg-red-500/50 rounded-full" />
+                </div>
+
+                <button 
+                  onClick={() => setViewState(ViewState.RESOURCE_DOWNLOAD)}
+                  className="absolute bottom-0 right-0 p-6 bg-white/5 hover:bg-red-600/20 border-t border-l border-white/10 rounded-tl-2xl transition-all duration-300 group-hover:pr-8"
+                >
+                  <Icon name="ArrowRight" className="w-6 h-6 text-red-400" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+        );
+      };
+
+      const ResourceDownload = ({ language, onBack, currentUser }) => {
+        const t = window.TEXTS[language];
+        const isAdmin = currentUser?.name === 'Henry' && currentUser?.password === '17257mifan';
+
+        // The locking code payload
+        const generateLockFile = () => {
+          const content = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parental Lock</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
+        #game-iframe { width: 100%; height: 100%; border: none; filter: blur(5px); pointer-events: none; }
+        #lock-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); color: white; display: flex;
+            flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .hidden { display: none !important; }
+        .lock-content { text-align: center; max-width: 400px; padding: 20px; }
+        h1 { color: #ef4444; margin-bottom: 20px; }
+        p { font-size: 1.2rem; margin-bottom: 20px; color: #d1d5db; }
+        .pay-text { font-size: 2rem; font-weight: bold; color: #fbbf24; margin: 20px 0; }
+        #auth-box { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; }
+        input { padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: white; }
+        button { padding: 8px 16px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+    <div id="auth-box">
+        <input type="password" id="pin-input" placeholder="PIN" />
+        <button onclick="checkPin()">Log In</button>
+    </div>
+
+    <div id="lock-overlay">
+        <div class="lock-content">
+            <h1>ACCESS DENIED</h1>
+            <p>This content is locked by Parental Control.</p>
+            <p>Please search WeChat ID <strong>adlevien_fans</strong> to unlock.</p>
+            <div class="pay-text">Pay For ¥2.00</div>
+        </div>
+    </div>
+
+    <!-- REPLACE src WITH ACTUAL GAME URL -->
+    <iframe id="game-iframe" src="about:blank"></iframe>
+
+    <script>
+        function checkPin() {
+            const pin = document.getElementById('pin-input').value;
+            if (pin === 'Oscar94518') {
+                document.getElementById('lock-overlay').classList.add('hidden');
+                document.getElementById('auth-box').classList.add('hidden');
+                const iframe = document.getElementById('game-iframe');
+                iframe.style.filter = 'none';
+                iframe.style.pointerEvents = 'auto';
+                // Optional: set real src here if hiding URL
+                // iframe.src = "REAL_GAME_URL_HERE"; 
+            } else {
+                alert('Incorrect PIN');
+            }
+        }
+    <\/script>
+</body>
+</html>
+          `;
+          const blob = new Blob([content], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'fai_parental_lock_wrapper.html';
+          a.click();
+          URL.revokeObjectURL(url);
+        };
+
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 animate-in fade-in duration-500">
+            <BackButton onClick={onBack} language={language} />
+            
+            <div className="bg-zinc-900/90 border border-red-500/30 rounded-3xl p-8 max-w-2xl w-full text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+                
+                <h2 className="text-3xl font-bold text-red-400 mb-8 uppercase tracking-widest">{t.resTitle}</h2>
+                
+                <div className="mb-12 flex justify-center">
+                    <div className={`p-6 rounded-full border-4 ${isAdmin ? 'border-green-500 bg-green-500/10' : 'border-red-500 bg-red-500/10'} transition-all duration-500`}>
+                        <Icon name={isAdmin ? "Unlock" : "Lock"} className={`w-16 h-16 ${isAdmin ? 'text-green-400' : 'text-red-400'}`} />
+                    </div>
+                </div>
+
+                {isAdmin ? (
+                    <div className="space-y-6">
+                        <p className="text-green-400 text-xl font-mono border border-green-500/30 bg-green-900/20 p-4 rounded-lg">
+                            {t.resUnlockedMsg}
+                        </p>
+                        <button 
+                            onClick={generateLockFile}
+                            className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white rounded-full font-bold text-lg tracking-wider transition-all hover:scale-105 shadow-[0_0_20px_rgba(22,163,74,0.4)] flex items-center justify-center gap-3 mx-auto"
+                        >
+                            <Icon name="Download" className="w-5 h-5" />
+                            {t.resDownloadBtn}
+                        </button>
+                    </div>
+                ) : (
+                    <div className="space-y-6">
+                        <div className="p-6 border border-red-500/30 bg-red-900/20 rounded-xl">
+                            <h3 className="text-xl font-bold text-red-400 mb-2">{t.resLocked}</h3>
+                            <p className="text-gray-300">{t.resLockedMsg}</p>
+                        </div>
+                        <div className="text-sm text-gray-500 font-mono">
+                            ID: adlevien_fans | Fee: ¥2.00
+                        </div>
+                    </div>
+                )}
+            </div>
+          </div>
+        );
+      };
+
+      const ProductList = ({ language, setViewState, mode }) => {
+        const { useState } = React;
+        const t = window.TEXTS[language];
+        const { ViewState } = window;
+        const title = mode === 'PRODUCTS' ? t.products : t.about;
+        
+        const [selectedAboutItem, setSelectedAboutItem] = useState(null);
+
+        const products = [
+          {
+            id: 'gen1',
+            title: t.gen1,
+            icon: 'Cpu',
+            color: 'text-cyan-200',
+            borderColor: 'group-hover:border-cyan-500/50',
+            bgGradient: 'bg-gradient-to-b from-slate-900/60 to-black/60',
+            shadow: 'shadow-blue-900/20',
+            onClick: () => {
+              if (mode === 'PRODUCTS') {
+                setViewState(ViewState.GEN1_APP);
+              } else {
+                setViewState(ViewState.GEN1_MARKETING);
+              }
+            },
+            aboutDesc: t.marketingDesc
+          },
+          {
+            id: 'gen2',
+            title: t.gen2,
+            icon: 'Zap',
+            color: 'text-amber-200',
+            borderColor: 'group-hover:border-amber-500/50',
+            bgGradient: 'bg-gradient-to-b from-stone-900/60 to-black/60',
+            shadow: 'shadow-amber-900/20',
+            onClick: () => {
+              if (mode === 'PRODUCTS') {
+                setViewState(ViewState.GEN2_APP);
+              } else {
+                setViewState(ViewState.GEN2_MARKETING);
+              }
+            },
+            aboutDesc: t.gen2MarketingDesc
+          },
+          {
+            id: 'deepseek',
+            title: t.deepseek,
+            icon: 'Ghost',
+            color: 'text-purple-300',
+            borderColor: 'group-hover:border-purple-500/50',
+            bgGradient: 'bg-gradient-to-b from-indigo-950/60 to-black/60',
+            shadow: 'shadow-purple-900/20',
+            pin: t.deepseekPin,
+            onClick: () => {
+              if (mode === 'PRODUCTS') {
+                window.open('https://tools.oscarstudio.cn/DeepSeek_Launcher.html', '_blank');
+              } else {
+                setSelectedAboutItem({
+                  title: t.deepseekTitle,
+                  desc: t.deepseekDesc
+                });
+              }
+            },
+            aboutDesc: t.deepseekDesc
+          }
+        ];
+
+        // Add CLUB to About list only
+        if (mode === 'ABOUT') {
+          products.push({
+            id: 'club',
+            title: t.clubProducts,
+            icon: 'Shapes',
+            color: 'text-orange-300',
+            borderColor: 'group-hover:border-orange-500/50',
+            bgGradient: 'bg-gradient-to-b from-orange-950/60 to-black/60',
+            shadow: 'shadow-orange-900/20',
+            onClick: () => {
+              setSelectedAboutItem({
+                title: t.clubFullTitle,
+                desc: t.clubAboutDesc
+              });
+            },
+            aboutDesc: t.clubAboutDesc
+          });
+        }
+
+        return (
+          <div className="flex flex-col items-center justify-start min-h-screen w-full pt-32 p-4 animate-in slide-in-from-bottom-10 duration-700">
+            
+            <BackButton onClick={() => setViewState(ViewState.HOME)} language={language} />
+
+            <h2 className="text-3xl md:text-5xl font-light text-blue-50 mb-16 tracking-widest uppercase opacity-90">
+              {title}
+            </h2>
+
+            <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+              {products.map((product) => (
+                <div 
+                  key={product.id}
+                  onClick={product.onClick}
+                  className={`relative w-full h-96 border border-white/10 rounded-3xl ${product.bgGradient} backdrop-blur-md overflow-hidden group ${product.borderColor} transition-all duration-500 shadow-2xl ${product.shadow} cursor-pointer hover:-translate-y-2`}
+                >
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50" />
+                  
+                  <div className="flex flex-col items-center justify-center h-full p-8">
+                     <div className="p-4 rounded-full bg-white/5 mb-4 group-hover:scale-110 transition-transform duration-500">
+                        <Icon name={product.icon} className={`w-16 h-16 ${product.color}`} />
+                     </div>
+                     
+                     {product.pin && (
+                        <span className="text-[10px] font-mono tracking-widest text-purple-400/70 border border-purple-500/20 px-2 py-0.5 rounded mb-4">
+                          {product.pin}
+                        </span>
+                     )}
+
+                     <h3 className="text-2xl font-bold text-white tracking-widest mb-2 text-center">{product.title}</h3>
+                     <div className={`w-12 h-1 ${product.color.replace('text', 'bg')}/50 rounded-full`} />
+                  </div>
+
+                  <div className="absolute bottom-0 right-0 p-6 bg-white/5 hover:bg-white/10 border-t border-l border-white/10 rounded-tl-2xl transition-all duration-300 group-hover:pr-8">
+                    <Icon name={mode === 'PRODUCTS' ? "ExternalLink" : "Info"} className={`w-6 h-6 ${product.color}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* About Modal */}
+            {selectedAboutItem && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setSelectedAboutItem(null)}>
+                <div className="bg-slate-900 border border-purple-500/30 rounded-2xl p-8 w-full max-w-2xl mx-4 shadow-2xl relative max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+                  <button 
+                    onClick={() => setSelectedAboutItem(null)}
+                    className="absolute top-4 right-4 text-slate-500 hover:text-white"
+                  >
+                    <Icon name="X" className="w-5 h-5" />
+                  </button>
+                  <h3 className="text-2xl font-bold text-purple-300 mb-4 sticky top-0 bg-slate-900 pb-2 border-b border-white/10">{selectedAboutItem.title}</h3>
+                  <div className="text-lg text-gray-300 leading-relaxed whitespace-pre-wrap">
+                    {selectedAboutItem.desc}
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </div>
+        );
+      };
+
+      const MODELS = [
+        "GPT-4o",
+        "Claude 3.5 Sonnet",
+        "Gemini 1.5 Pro",
+        "Llama 3 70B",
+        "Mistral Large",
+        "FAI Chaos Engine"
+      ];
+
+      const Gen1App = ({ language, onBack }) => {
+        const { useState } = React;
+        const t = window.TEXTS[language];
+        
+        const [input, setInput] = useState('');
+        const [response, setResponse] = useState('');
+        const [isLoading, setIsLoading] = useState(false);
+        const [selectedModel, setSelectedModel] = useState(MODELS[5]);
+        const [thinkingTime, setThinkingTime] = useState(2000);
+        const [showSettings, setShowSettings] = useState(false);
+        const [tempThinkingTime, setTempThinkingTime] = useState(2000);
+
+        const handleTitleDoubleClick = () => {
+          setTempThinkingTime(thinkingTime);
+          setShowSettings(true);
+        };
+
+        const handleSend = async () => {
+          if (!input.trim() || isLoading) return;
+
+          setIsLoading(true);
+          setResponse('');
+          
+          await new Promise(resolve => setTimeout(resolve, thinkingTime));
+
+          const result = await window.generateIrrelevantResponse(input);
+          
+          let i = 0;
+          const typeWriter = setInterval(() => {
+              setResponse(result.substring(0, i + 1));
+              i++;
+              if (i === result.length) {
+                  clearInterval(typeWriter);
+                  setIsLoading(false);
+              }
+          }, 30);
+        };
+
+        const saveSettings = () => {
+          setThinkingTime(tempThinkingTime);
+          setShowSettings(false);
+        };
+
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 relative animate-in fade-in zoom-in duration-500">
+            <BackButton onClick={onBack} language={language} />
+            <div 
+              className="absolute top-24 md:top-32 right-8 md:right-16 cursor-pointer select-none group"
+              onDoubleClick={handleTitleDoubleClick}
+            >
+              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-300 opacity-80 group-hover:opacity-100 transition-opacity">
+                {t.gen1}
+              </h2>
+              <div className="text-xs text-right text-blue-400 opacity-0 group-hover:opacity-60 transition-opacity">
+                (Double click to config)
+              </div>
+            </div>
+            <div className="w-full max-w-2xl z-10">
+              <div className="min-h-[200px] mb-8 p-6 rounded-2xl bg-black/40 border border-blue-500/20 backdrop-blur-sm shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                 {isLoading && !response ? (
+                   <div className="flex items-center gap-3 text-cyan-400 animate-pulse">
+                     <Icon name="Sparkles" className="w-5 h-5" />
+                     <span className="text-sm font-mono">{t.thinking}</span>
+                   </div>
+                 ) : (
+                   <p className="text-lg md:text-xl text-blue-50 font-light leading-relaxed">{response}</p>
+                 )}
+              </div>
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-black rounded-xl border border-white/10 flex items-center p-2">
+                  <input 
+                    type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder={t.inputPlaceholder}
+                    className="flex-1 bg-transparent text-white px-4 py-3 outline-none placeholder-blue-500/50"
+                  />
+                  <button onClick={handleSend} disabled={isLoading} className="p-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <Icon name="Send" className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-center">
+                 <div className="relative">
+                   <select value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)} className="appearance-none bg-black/50 border border-blue-500/30 text-blue-300 text-sm py-2 pl-4 pr-10 rounded-full focus:outline-none focus:border-cyan-500 cursor-pointer hover:bg-black/70 transition-colors">
+                     {MODELS.map(m => <option key={m} value={m}>{m}</option>)}
+                   </select>
+                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-blue-500"><svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
+                 </div>
+              </div>
+            </div>
+            {showSettings && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="bg-slate-900 border border-blue-500/30 rounded-2xl p-8 w-96 shadow-2xl">
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><Icon name="Settings" className="w-5 h-5 text-cyan-400" />Settings</h3>
+                  <div className="mb-8">
+                    <label className="block text-sm text-blue-300 mb-2">{t.setThinkingTime}</label>
+                    <input type="number" min="0" max="10000" step="500" value={tempThinkingTime} onChange={(e) => setTempThinkingTime(Number(e.target.value))} className="w-full bg-slate-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none appearance-none" />
+                    <div className="text-right text-cyan-400 mt-2 font-mono">{formatTimeDisplay(tempThinkingTime)}</div>
+                  </div>
+                  <div className="flex justify-end gap-4">
+                    <button onClick={() => setShowSettings(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors">Cancel</button>
+                    <button onClick={saveSettings} className="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-semibold transition-colors">{t.save}</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      const Gen2App = ({ language, onBack }) => {
+        const { useState } = React;
+        const t = window.TEXTS[language];
+        
+        const [input, setInput] = useState('');
+        const [response, setResponse] = useState('');
+        const [isLoading, setIsLoading] = useState(false);
+        const [selectedModel, setSelectedModel] = useState(MODELS[5]);
+        const [thinkingTime, setThinkingTime] = useState(5000); 
+        const [showSettings, setShowSettings] = useState(false);
+        const [tempThinkingTime, setTempThinkingTime] = useState(5000);
+
+        const handleTitleDoubleClick = () => {
+          setTempThinkingTime(thinkingTime);
+          setShowSettings(true);
+        };
+
+        const handleSend = async () => {
+          if (!input.trim() || isLoading) return;
+
+          setIsLoading(true);
+          setResponse('');
+          
+          const waitTime = Math.min(thinkingTime, 2147483647); 
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+
+          const result = await window.generateIrrelevantResponse(input);
+          
+          let i = 0;
+          const typeWriter = setInterval(() => {
+              setResponse(result.substring(0, i + 1));
+              i++;
+              if (i === result.length) {
+                  clearInterval(typeWriter);
+                  setIsLoading(false);
+              }
+          }, 30);
+        };
+
+        const saveSettings = () => {
+          setThinkingTime(tempThinkingTime);
+          setShowSettings(false);
+        };
+
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 relative animate-in fade-in zoom-in duration-500">
+            <BackButton onClick={onBack} language={language} />
+            <div className="absolute top-24 md:top-32 right-8 md:right-16 cursor-pointer select-none group" onDoubleClick={handleTitleDoubleClick}>
+              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-500 opacity-80 group-hover:opacity-100 transition-opacity">
+                {t.gen2}
+              </h2>
+              <div className="text-xs text-right text-amber-400 opacity-0 group-hover:opacity-60 transition-opacity">
+                (Double click to config)
+              </div>
+            </div>
+            <div className="w-full max-w-2xl z-10">
+              <div className="min-h-[200px] mb-8 p-6 rounded-2xl bg-black/40 border border-amber-500/20 backdrop-blur-sm shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+                 {isLoading && !response ? (
+                   <div className="flex flex-col items-center justify-center h-full text-amber-400 animate-pulse gap-3">
+                     <Icon name="Hourglass" className="w-8 h-8" />
+                     <span className="text-sm font-mono tracking-widest uppercase">Deep Stasis Active</span>
+                     <span className="text-xs text-amber-600">Expected completion: {formatTimeDisplay(thinkingTime)}</span>
+                   </div>
+                 ) : (
+                   <p className="text-lg md:text-xl text-amber-50 font-light leading-relaxed">{response}</p>
+                 )}
+              </div>
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-black rounded-xl border border-white/10 flex items-center p-2">
+                  <input 
+                    type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder={t.inputPlaceholder}
+                    className="flex-1 bg-transparent text-white px-4 py-3 outline-none placeholder-amber-500/50"
+                  />
+                  <button onClick={handleSend} disabled={isLoading} className="p-3 rounded-lg bg-amber-600 hover:bg-amber-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <Icon name="Send" className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {showSettings && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="bg-stone-900 border border-amber-500/30 rounded-2xl p-8 w-96 shadow-2xl">
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><Icon name="Settings" className="w-5 h-5 text-amber-400" />Settings</h3>
+                  <div className="mb-8">
+                    <label className="block text-sm text-amber-300 mb-2">{t.setThinkingTime}</label>
+                    <input type="number" min="1000" max="11510400000" step="1000" value={tempThinkingTime} onChange={(e) => setTempThinkingTime(Number(e.target.value))} className="w-full bg-stone-700 rounded-lg px-4 py-2 text-white focus:border-amber-500 focus:outline-none appearance-none" />
+                    <div className="text-right text-amber-400 mt-2 font-mono">{formatTimeDisplay(tempThinkingTime)}</div>
+                  </div>
+                  <div className="flex justify-end gap-4">
+                    <button onClick={() => setShowSettings(false)} className="px-4 py-2 text-sm text-stone-400 hover:text-white transition-colors">Cancel</button>
+                    <button onClick={saveSettings} className="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-semibold transition-colors">{t.save}</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      const Gen1Marketing = ({ language, onBack }) => {
+        const t = window.TEXTS[language];
+        return (
+          <div className="w-full min-h-screen overflow-y-auto no-scrollbar animate-in slide-in-from-bottom-20 duration-1000 bg-black">
+            <BackButton onClick={onBack} language={language} />
+            <section className="h-screen flex flex-col items-center justify-center text-center p-4 relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-black to-black opacity-50" />
+              <h2 className="text-xl md:text-2xl font-semibold text-orange-400 mb-4 animate-bounce z-10">New</h2>
+              <h1 className="text-6xl md:text-9xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-gray-100 to-gray-600 mb-6 drop-shadow-2xl z-10">{t.marketingTitle}</h1>
+              <p className="text-2xl md:text-5xl font-medium text-gray-300 mb-12 max-w-4xl leading-tight z-10">{t.marketingSubtitle}</p>
+              <div className="text-sm text-gray-500 font-mono border border-gray-800 rounded-full px-4 py-1 z-10 bg-black/50">Generation 1 &nbsp;|&nbsp; 0% Useful</div>
+            </section>
+            <section className="py-24 px-4 bg-zinc-950">
+              <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2 relative h-[500px] rounded-3xl bg-gradient-to-br from-gray-900 to-black border border-white/10 p-8 flex flex-col justify-end overflow-hidden group">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 group-hover:opacity-40 transition-opacity duration-700 mix-blend-overlay" />
+                  <div className="absolute top-8 right-8 animate-pulse"><Icon name="Cpu" className="w-12 h-12 text-cyan-500" /></div>
+                  <h3 className="text-4xl font-bold text-white mb-2 relative z-10">{t.bentoChipTitle}</h3>
+                  <p className="text-xl text-gray-400 relative z-10">{t.bentoChipDesc}</p>
+                </div>
+                <div className="relative h-[240px] md:h-auto rounded-3xl bg-zinc-900 border border-white/10 p-8 flex flex-col justify-center items-center text-center group hover:bg-zinc-800 transition-colors">
+                  <Icon name="Battery" className="w-16 h-16 text-green-500 mb-4 group-hover:rotate-90 transition-transform duration-500" />
+                  <h3 className="text-2xl font-bold text-white mb-2">{t.bentoBatteryTitle}</h3>
+                  <p className="text-sm text-gray-400">{t.bentoBatteryDesc}</p>
+                </div>
+                <div className="relative h-[240px] md:h-auto rounded-3xl bg-zinc-900 border border-white/10 p-8 flex flex-col justify-center items-center text-center group hover:bg-zinc-800 transition-colors">
+                   <Icon name="AlertTriangle" className="w-16 h-16 text-yellow-500 mb-4 animate-bounce" />
+                   <h3 className="text-2xl font-bold text-white mb-2">{t.bentoNeuralTitle}</h3>
+                   <p className="text-sm text-gray-400">{t.bentoNeuralDesc}</p>
+                </div>
+              </div>
+            </section>
+            <section className="min-h-screen flex flex-col items-center justify-center py-24 px-4 bg-gradient-to-b from-black via-zinc-900 to-black">
+              <div className="max-w-5xl mx-auto text-center">
+                  <h2 className="text-5xl md:text-8xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gray-400 via-white to-gray-400">{t.proTitle}</h2>
+                  <p className="text-2xl md:text-4xl text-gray-500 font-light mb-16 tracking-widest uppercase">{t.proSubtitle}</p>
+                  <div className="relative w-full h-[600px] rounded-2xl overflow-hidden border border-gray-700 shadow-2xl shadow-blue-900/20">
+                      <div className="absolute inset-0 bg-black flex flex-col p-8 font-mono">
+                          <div className="flex-1 space-y-8">
+                              <div className="flex justify-end"><div className="bg-blue-600 text-white p-4 rounded-2xl rounded-tr-none max-w-md text-lg">"Help me write a resignation letter."</div></div>
+                              <div className="flex justify-start"><div className="bg-zinc-800 text-gray-200 p-4 rounded-2xl rounded-tl-none max-w-md text-lg border border-gray-700"><span className="text-xs text-gray-500 mb-2 block">FAI Gen1 (Titanium Mode)</span>"The avocado is a fruit that is technically a large berry containing a single large seed. Would you like a recipe for guacamole?"</div></div>
+                          </div>
+                          <div className="border-t border-gray-800 pt-4 flex items-center justify-between text-gray-600"><span>Thinking... (50000ms)</span><Icon name="Zap" className="w-5 h-5 text-gray-600" /></div>
+                      </div>
+                  </div>
+              </div>
+            </section>
+          </div>
+        );
+      };
+
+      const Gen2Marketing = ({ language, onBack }) => {
+        const t = window.TEXTS[language];
+        return (
+          <div className="w-full min-h-screen overflow-y-auto no-scrollbar animate-in slide-in-from-bottom-20 duration-1000 bg-black">
+            <BackButton onClick={onBack} language={language} />
+            <section className="h-screen flex flex-col items-center justify-center text-center p-4 relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/30 via-black to-black opacity-60" />
+              <h2 className="text-xl md:text-2xl font-semibold text-amber-600 mb-4 animate-pulse z-10">Evolution</h2>
+              <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-amber-100 mb-6 drop-shadow-2xl z-10">{t.gen2MarketingTitle}</h1>
+              <p className="text-2xl md:text-5xl font-medium text-amber-500/80 mb-12 max-w-4xl leading-tight z-10">{t.gen2MarketingSubtitle}</p>
+              <div className="text-sm text-stone-500 font-mono border border-stone-800 rounded-full px-4 py-1 z-10 bg-black/50">Generation 2 &nbsp;|&nbsp; Infinite Patience</div>
+            </section>
+            
+            <section className="py-24 px-4 bg-stone-950 text-center">
+               <div className="max-w-4xl mx-auto space-y-12">
+                  <Icon name="Hourglass" className="w-24 h-24 text-amber-500 mx-auto animate-spin-slow" style={{animationDuration: '10s'}} />
+                  <h3 className="text-4xl font-bold text-white">Deep Stasis™</h3>
+                  <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">{t.gen2MarketingDesc}</p>
+                  <div className="grid grid-cols-2 gap-8 text-left mt-16">
+                     <div className="p-8 border border-amber-900/30 rounded-2xl bg-amber-950/10">
+                        <h4 className="text-amber-400 font-bold mb-2">365 Year Runtime</h4>
+                        <p className="text-stone-400 text-sm">Our servers are prepaid until the year 2389. We will outlast your query.</p>
+                     </div>
+                     <div className="p-8 border border-amber-900/30 rounded-2xl bg-amber-950/10">
+                        <h4 className="text-amber-400 font-bold mb-2">Tectonic Clock</h4>
+                        <p className="text-stone-400 text-sm">Processor cycles synchronized with continental drift for maximum slowness.</p>
+                     </div>
+                  </div>
+               </div>
+            </section>
+          </div>
+        );
+      };
+
+      const COMPONENT_COLORS = {
+        EMPTY: 'bg-zinc-900/50',
+        CPU_P: 'bg-red-500',
+        CPU_E: 'bg-blue-400',
+        GPU: 'bg-green-500',
+        NPU: 'bg-purple-500',
+        SMOKE: 'bg-gray-400',
+      };
+
+      const SiliconSimulator = ({ language, onBack }) => {
+        const { useState, useRef } = React;
+        const t = window.TEXTS[language];
+        const [mode, setMode] = useState('TUTORIAL');
+        const [gridSize, setGridSize] = useState(4); 
+        const [grid, setGrid] = useState(Array(16).fill('EMPTY'));
+        const [selectedTool, setSelectedTool] = useState('CPU_P');
+        const [engravingText, setEngravingText] = useState('FAI i9-UltraFail');
+        
+        const canvasRef = useRef(null);
+
+        const handleGridResize = (size) => {
+          setGridSize(size);
+          setGrid(Array(size * size).fill('EMPTY'));
+        };
+
+        const handleCellClick = (index) => {
+          const newGrid = [...grid];
+          newGrid[index] = selectedTool;
+          setGrid(newGrid);
+        };
+
+        const handleDownload = () => {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+
+          ctx.clearRect(0, 0, 800, 800);
+
+          const gradient = ctx.createLinearGradient(0, 0, 800, 800);
+          gradient.addColorStop(0, '#e2e8f0');
+          gradient.addColorStop(0.5, '#cbd5e1');
+          gradient.addColorStop(1, '#94a3b8');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.roundRect(100, 100, 600, 600, 40);
+          ctx.fill();
+          
+          ctx.strokeStyle = '#64748b';
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          ctx.fillStyle = '#475569';
+          ctx.font = 'bold 48px "Inter", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          
+          ctx.fillText(engravingText, 400, 350);
+          
+          ctx.font = '32px monospace';
+          ctx.fillText('MALAYSIA MADE', 400, 450);
+          ctx.fillText('BATCH: #NULL000', 400, 500);
+
+          ctx.font = 'bold 80px "Playfair Display", serif';
+          ctx.fillStyle = '#334155';
+          ctx.fillText('FAI', 400, 250);
+
+          const dataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = `FAI-Chip-${Date.now()}.png`;
+          link.href = dataUrl;
+          link.click();
+        };
+
+        const renderTutorial = () => (
+          <div className="max-w-3xl mx-auto text-center space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="space-y-4">
+              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-200 to-orange-500">
+                {t.simTutorialTitle}
+              </h2>
+              <div className="h-1 w-32 bg-orange-500 mx-auto rounded-full" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                <div className="text-6xl mb-4">🏜️</div>
+                <p className="text-gray-300 font-medium">{t.simTutorialStep1}</p>
+              </div>
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                 <div className="text-6xl mb-4">🪵</div>
+                <p className="text-gray-300 font-medium">{t.simTutorialStep2}</p>
+              </div>
+              <div className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                 <div className="text-6xl mb-4">🖍️</div>
+                <p className="text-gray-300 font-medium">{t.simTutorialStep3}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setMode('DESIGN')}
+              className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-full font-bold text-lg tracking-wider transition-all hover:scale-105 shadow-[0_0_30px_rgba(234,88,12,0.4)]"
+            >
+              {t.simStartDesign}
+            </button>
+          </div>
+        );
+
+        const renderDesign = () => (
+          <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl mx-auto h-[80vh]">
+            <div className="w-full lg:w-80 bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col gap-6 overflow-y-auto">
+              <div>
+                <h3 className="text-orange-400 font-bold mb-4 uppercase tracking-wider text-sm">{t.simGridSize}</h3>
+                <input 
+                  type="range" 
+                  min="4" 
+                  max="10" 
+                  value={gridSize} 
+                  onChange={(e) => handleGridResize(parseInt(e.target.value))}
+                  className="w-full accent-orange-500"
+                />
+                <div className="text-right text-gray-400 font-mono mt-1">{gridSize} x {gridSize} nm</div>
+              </div>
+
+              <div>
+                <h3 className="text-orange-400 font-bold mb-4 uppercase tracking-wider text-sm">{t.simTools}</h3>
+                <div className="space-y-2">
+                  {[
+                    { id: 'CPU_P', label: t.compCpuP, iconName: 'Cpu', color: 'text-red-400 border-red-900/50 bg-red-900/20' },
+                    { id: 'CPU_E', label: t.compCpuE, iconName: 'Zap', color: 'text-blue-400 border-blue-900/50 bg-blue-900/20' },
+                    { id: 'GPU', label: t.compGpu, iconName: 'Monitor', color: 'text-green-400 border-green-900/50 bg-green-900/20' },
+                    { id: 'NPU', label: t.compNpu, iconName: 'Brain', color: 'text-purple-400 border-purple-900/50 bg-purple-900/20' },
+                    { id: 'SMOKE', label: t.compSmoke, iconName: 'CloudFog', color: 'text-gray-400 border-gray-700 bg-gray-800/50' },
+                    { id: 'EMPTY', label: t.compEmpty, iconName: 'Trash2', color: 'text-zinc-400 border-zinc-800 bg-zinc-900' },
+                  ].map((tool) => (
+                    <button
+                      key={tool.id}
+                      onClick={() => setSelectedTool(tool.id)}
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${tool.color} ${selectedTool === tool.id ? 'ring-2 ring-white/50 scale-105' : 'hover:bg-white/5'}`}
+                    >
+                      <Icon name={tool.iconName} className="w-5 h-5" />
+                      <span className="text-sm font-medium">{tool.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button 
+                 onClick={() => setMode('PACKAGE')}
+                 className="mt-auto w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-orange-900/40 transition-all"
+              >
+                {t.simPackage} &rarr;
+              </button>
+            </div>
+
+            <div className="flex-1 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-center p-8 relative overflow-hidden">
+               <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+                   backgroundImage: `radial-gradient(#22c55e 1px, transparent 1px)`,
+                   backgroundSize: '20px 20px'
+               }} />
+               
+               <div 
+                 className="grid gap-1 bg-green-900/30 p-4 border-4 border-yellow-600/50 rounded shadow-2xl backdrop-blur-sm"
+                 style={{
+                   gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+                   width: '100%',
+                   maxWidth: '600px',
+                   aspectRatio: '1/1'
+                 }}
+               >
+                 {grid.map((cell, i) => (
+                   <div
+                     key={i}
+                     onClick={() => handleCellClick(i)}
+                     className={`${COMPONENT_COLORS[cell]} rounded-sm cursor-pointer hover:brightness-125 transition-all border border-black/20 relative group`}
+                   >
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+                   </div>
+                 ))}
+               </div>
+            </div>
+          </div>
+        );
+
+        const renderPackage = () => (
+          <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto space-y-8 animate-in zoom-in duration-500">
+            <div className="text-center">
+               <h2 className="text-3xl font-bold text-white mb-2">{t.simPackage}</h2>
+               <p className="text-gray-400">Ready to overheat.</p>
+            </div>
+
+            <div className="relative w-96 h-96 bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center border-4 border-slate-500">
+                <h1 className="text-5xl font-serif font-bold text-slate-600/80 tracking-tighter mb-4 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">FAI</h1>
+                
+                <div className="font-sans font-bold text-2xl text-slate-700/80 tracking-wider mb-8 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] uppercase">
+                  {engravingText}
+                </div>
+
+                <div className="font-mono text-sm text-slate-500 flex flex-col items-center gap-1">
+                   <span>MALAYSIA MADE</span>
+                   <span>BATCH: #NULL000</span>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent rounded-[2.8rem] pointer-events-none" />
+            </div>
+
+            <div className="w-full max-w-md space-y-4 bg-zinc-900/80 p-6 rounded-xl border border-white/10">
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">{t.simEngraving}</label>
+                <input 
+                  type="text" 
+                  value={engravingText}
+                  onChange={(e) => setEngravingText(e.target.value)}
+                  className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                  maxLength={15}
+                />
+              </div>
+              
+              <div className="flex gap-4">
+                  <button
+                    onClick={() => setMode('DESIGN')}
+                    className="flex-1 py-3 text-gray-400 hover:text-white border border-gray-700 rounded-lg"
+                  >
+                    {t.back}
+                  </button>
+                  <button
+                    onClick={handleDownload}
+                    className="flex-1 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-lg flex items-center justify-center gap-2"
+                  >
+                    <Icon name="Download" className="w-4 h-4" />
+                    {t.simDownload}
+                  </button>
+              </div>
+            </div>
+            
+            <canvas 
+              ref={canvasRef} 
+              width={800} 
+              height={800} 
+              className="hidden"
+            />
+          </div>
+        );
+
+        return (
+          <div className="flex flex-col items-center justify-start min-h-screen w-full pt-24 p-4 relative overflow-y-auto">
+            <BackButton onClick={onBack} language={language} />
+            
+            {mode === 'TUTORIAL' && renderTutorial()}
+            {mode === 'DESIGN' && renderDesign()}
+            {mode === 'PACKAGE' && renderPackage()}
+          </div>
+        );
+      };
+
+      const MOBO_STYLES = {
+        EMPTY: { color: 'bg-green-900/20 border-green-800/30', icon: null },
+        SOCKET: { color: 'bg-gray-200 border-gray-400', icon: 'BoxSelect', labelKey: 'moboToolSocket' },
+        RAM: { color: 'bg-blue-600 border-blue-400', icon: 'Server', labelKey: 'moboToolRam' },
+        PCIE: { color: 'bg-zinc-600 border-zinc-400', icon: 'Disc', labelKey: 'moboToolPcie' },
+        VRM: { color: 'bg-red-600 border-red-400', icon: 'Zap', labelKey: 'moboToolVrm' },
+        TRACE: { color: 'bg-amber-500/80 border-amber-300', icon: 'Activity', labelKey: 'moboToolTrace' },
+        CAP: { color: 'bg-yellow-400 border-yellow-200 rounded-full', icon: 'Battery', labelKey: 'moboToolCap' },
+      };
+
+      const MotherboardSimulator = ({ language, onBack }) => {
+        const { useState, useRef } = React;
+        const t = window.TEXTS[language];
+        const [mode, setMode] = useState('TUTORIAL');
+        const [gridSize, setGridSize] = useState(8); 
+        const [grid, setGrid] = useState(Array(64).fill('EMPTY'));
+        const [selectedTool, setSelectedTool] = useState('SOCKET');
+        const [engravingText, setEngravingText] = useState('FAI-Z890-ULTRA');
+        
+        const canvasRef = useRef(null);
+
+        const handleGridResize = (size) => {
+          setGridSize(size);
+          setGrid(Array(size * size).fill('EMPTY'));
+        };
+
+        const handleCellClick = (index) => {
+          const newGrid = [...grid];
+          newGrid[index] = selectedTool;
+          setGrid(newGrid);
+        };
+
+        const handleDownload = () => {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+
+          const WIDTH = 800;
+          const HEIGHT = 800;
+          const CELL_SIZE = (WIDTH - 100) / gridSize; 
+          const OFFSET = 50;
+
+          // Clear and background
+          ctx.clearRect(0, 0, WIDTH, HEIGHT);
+          
+          // PCB Board (Dark Green)
+          const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+          gradient.addColorStop(0, '#064e3b'); // emerald-900
+          gradient.addColorStop(1, '#022c22'); // emerald-950
+          ctx.fillStyle = gradient;
+          ctx.roundRect(20, 20, WIDTH - 40, HEIGHT - 40, 20);
+          ctx.fill();
+          ctx.strokeStyle = '#34d399'; // emerald-400 border
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          // Draw Grid Components
+          grid.forEach((comp, i) => {
+              if (comp === 'EMPTY') return;
+
+              const xIndex = i % gridSize;
+              const yIndex = Math.floor(i / gridSize);
+              const x = OFFSET + xIndex * CELL_SIZE;
+              const y = OFFSET + yIndex * CELL_SIZE;
+
+              // Draw component based on type
+              switch (comp) {
+                  case 'SOCKET':
+                      ctx.fillStyle = '#e2e8f0'; 
+                      ctx.fillRect(x + 5, y + 5, CELL_SIZE - 10, CELL_SIZE - 10);
+                      ctx.strokeStyle = '#94a3b8';
+                      ctx.strokeRect(x + 10, y + 10, CELL_SIZE - 20, CELL_SIZE - 20);
+                      break;
+                  case 'RAM':
+                      ctx.fillStyle = '#2563eb'; 
+                      ctx.fillRect(x + 2, y + 5, CELL_SIZE - 4, CELL_SIZE - 10);
+                      ctx.fillStyle = '#fbbf24';
+                      ctx.fillRect(x + 4, y + CELL_SIZE - 12, CELL_SIZE - 8, 4);
+                      break;
+                  case 'PCIE':
+                      ctx.fillStyle = '#52525b'; 
+                      ctx.fillRect(x + 2, y + 15, CELL_SIZE - 4, 15);
+                      break;
+                  case 'VRM':
+                      ctx.fillStyle = '#dc2626'; 
+                      ctx.fillRect(x + 5, y + 5, CELL_SIZE - 10, CELL_SIZE - 10);
+                      break;
+                  case 'TRACE':
+                      ctx.strokeStyle = '#fbbf24'; 
+                      ctx.lineWidth = 3;
+                      ctx.beginPath();
+                      ctx.moveTo(x, y + CELL_SIZE / 2);
+                      ctx.lineTo(x + CELL_SIZE, y + CELL_SIZE / 2);
+                      ctx.moveTo(x + CELL_SIZE / 2, y);
+                      ctx.lineTo(x + CELL_SIZE / 2, y + CELL_SIZE);
+                      ctx.stroke();
+                      break;
+                  case 'CAP':
+                      ctx.fillStyle = '#facc15'; 
+                      ctx.beginPath();
+                      ctx.arc(x + CELL_SIZE / 2, y + CELL_SIZE / 2, CELL_SIZE / 3, 0, Math.PI * 2);
+                      ctx.fill();
+                      ctx.strokeStyle = '#a16207';
+                      ctx.stroke();
+                      break;
+              }
+          });
+
+          // Draw Engraving
+          ctx.save();
+          ctx.translate(WIDTH - 60, HEIGHT - 80);
+          ctx.rotate(-Math.PI / 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+          ctx.font = 'bold 36px "Inter", sans-serif';
+          ctx.fillText(engravingText, 0, 0);
+          ctx.restore();
+
+          // FAI Logo
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+          ctx.font = 'bold 60px "Playfair Display", serif';
+          ctx.fillText('FAI', 60, HEIGHT - 60);
+
+          const dataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = `FAI-Mobo-${Date.now()}.png`;
+          link.href = dataUrl;
+          link.click();
+        };
+
+        const renderTutorial = () => (
+          <div className="max-w-4xl mx-auto text-center space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="space-y-4">
+              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-green-600">
+                {t.moboTutorialTitle}
+              </h2>
+              <div className="h-1 w-32 bg-green-500 mx-auto rounded-full" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                <div className="text-6xl mb-4">🟩</div>
+                <p className="text-gray-300 font-medium text-lg">{t.moboTutorialStep1}</p>
+              </div>
+              <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                 <div className="text-6xl mb-4">⚡</div>
+                <p className="text-gray-300 font-medium text-lg">{t.moboTutorialStep2}</p>
+              </div>
+              <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors">
+                 <div className="text-6xl mb-4">🔧</div>
+                <p className="text-gray-300 font-medium text-lg">{t.moboTutorialStep3}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setMode('DESIGN')}
+              className="px-12 py-5 bg-green-600 hover:bg-green-500 text-white rounded-full font-bold text-xl tracking-wider transition-all hover:scale-105 shadow-[0_0_30px_rgba(22,163,74,0.4)]"
+            >
+              {t.moboStart}
+            </button>
+          </div>
+        );
+
+        const renderDesign = () => (
+          <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl mx-auto h-[80vh]">
+            <div className="w-full lg:w-80 bg-zinc-900/90 backdrop-blur-md border border-green-500/20 rounded-2xl p-6 flex flex-col gap-6 overflow-y-auto">
+              <div>
+                <h3 className="text-green-400 font-bold mb-4 uppercase tracking-wider text-sm">{t.simGridSize}</h3>
+                <input 
+                  type="range" 
+                  min="4" 
+                  max="12" 
+                  value={gridSize} 
+                  onChange={(e) => handleGridResize(parseInt(e.target.value))}
+                  className="w-full accent-green-500"
+                />
+                <div className="text-right text-gray-400 font-mono mt-1">{gridSize} x {gridSize}</div>
+              </div>
+
+              <div>
+                <h3 className="text-green-400 font-bold mb-4 uppercase tracking-wider text-sm">{t.moboTools}</h3>
+                <div className="space-y-2">
+                  {Object.keys(MOBO_STYLES).filter(k => k !== 'EMPTY').map((key) => {
+                      const style = MOBO_STYLES[key];
+                      return (
+                          <button
+                              key={key}
+                              onClick={() => setSelectedTool(key)}
+                              className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${selectedTool === key ? 'ring-2 ring-white/50 scale-105' : 'hover:bg-white/5'} ${style.color.split(' ')[0]} bg-opacity-20 ${style.color.split(' ')[1]}`}
+                          >
+                              {style.icon && <Icon name={style.icon} className="w-5 h-5 text-gray-200" />}
+                              <span className="text-sm font-medium text-gray-200">
+                                  {t[style.labelKey]}
+                              </span>
+                          </button>
+                      );
+                  })}
+                   <button
+                      onClick={() => setSelectedTool('EMPTY')}
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${selectedTool === 'EMPTY' ? 'ring-2 ring-white/50 scale-105' : 'hover:bg-white/5'} border-red-500/50 bg-red-900/20`}
+                  >
+                      <Icon name="Trash2" className="w-5 h-5 text-red-300" />
+                      <span className="text-sm font-medium text-red-300">Eraser</span>
+                  </button>
+                </div>
+              </div>
+
+              <button 
+                 onClick={() => setMode('PACKAGE')}
+                 className="mt-auto w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-green-900/40 transition-all flex items-center justify-center gap-2"
+              >
+                {t.simPackage} <Icon name="ArrowRight" className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 bg-green-950/30 border border-green-500/20 rounded-2xl flex items-center justify-center p-8 relative overflow-hidden">
+               <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
+                   backgroundImage: `radial-gradient(#15803d 1px, transparent 1px)`,
+                   backgroundSize: '20px 20px'
+               }} />
+               
+               <div 
+                 className="grid gap-1 bg-green-900 p-4 border-4 border-green-700/50 rounded-xl shadow-2xl backdrop-blur-sm"
+                 style={{
+                   gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+                   width: '100%',
+                   maxWidth: '600px',
+                   aspectRatio: '1/1'
+                 }}
+               >
+                 {grid.map((cell, i) => {
+                   const style = MOBO_STYLES[cell];
+                   return (
+                      <div
+                          key={i}
+                          onClick={() => handleCellClick(i)}
+                          className={`${style.color} border rounded-sm cursor-pointer hover:brightness-125 transition-all relative group flex items-center justify-center`}
+                      >
+                          {style.icon && <Icon name={style.icon} className="w-1/2 h-1/2 text-white/70" />}
+                      </div>
+                   );
+                 })}
+               </div>
+            </div>
+          </div>
+        );
+
+        const renderPackage = () => (
+          <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto space-y-8 animate-in zoom-in duration-500">
+            <div className="text-center">
+               <h2 className="text-3xl font-bold text-white mb-2">{t.simPackage}</h2>
+               <p className="text-gray-400">Ready for Mass Production (Fake).</p>
+            </div>
+
+            <div className="relative w-[500px] h-[500px] bg-emerald-900 rounded-lg shadow-[0_20px_50px_rgba(0,20,0,0.5)] flex flex-col items-center justify-center border-4 border-emerald-700 overflow-hidden">
+                <h1 className="absolute bottom-8 left-8 text-6xl font-serif font-bold text-white/10 tracking-tighter">FAI</h1>
+                
+                <div className="absolute top-1/2 right-[-80px] rotate-90 origin-center font-sans font-bold text-3xl text-white/40 tracking-wider uppercase whitespace-nowrap">
+                  {engravingText}
+                </div>
+
+                <div className="grid gap-1 w-3/4 h-3/4 opacity-80" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+                   {grid.map((cell, i) => {
+                       const style = MOBO_STYLES[cell];
+                       return <div key={i} className={`${style.color} rounded-[1px]`} />;
+                   })}
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
+            </div>
+
+            <div className="w-full max-w-md space-y-4 bg-zinc-900/80 p-6 rounded-xl border border-white/10">
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">{t.moboEngravePrompt}</label>
+                <input 
+                  type="text" 
+                  value={engravingText}
+                  onChange={(e) => setEngravingText(e.target.value)}
+                  className="w-full bg-black border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  maxLength={20}
+                />
+              </div>
+              
+              <div className="flex gap-4">
+                  <button
+                    onClick={() => setMode('DESIGN')}
+                    className="flex-1 py-3 text-gray-400 hover:text-white border border-gray-700 rounded-lg"
+                  >
+                    {t.back}
+                  </button>
+                  <button
+                    onClick={handleDownload}
+                    className="flex-1 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg flex items-center justify-center gap-2"
+                  >
+                    <Icon name="Download" className="w-4 h-4" />
+                    {t.moboDownload}
+                  </button>
+              </div>
+            </div>
+            
+            <canvas 
+              ref={canvasRef} 
+              width={800} 
+              height={800} 
+              className="hidden"
+            />
+          </div>
+        );
+
+        return (
+          <div className="flex flex-col items-center justify-start min-h-screen w-full pt-24 p-4 relative overflow-y-auto">
+            <BackButton onClick={onBack} language={language} />
+            
+            {mode === 'TUTORIAL' && renderTutorial()}
+            {mode === 'DESIGN' && renderDesign()}
+            {mode === 'PACKAGE' && renderPackage()}
+          </div>
+        );
+      };
+
+      /* -------------------------------------------------------------------------- */
+      /*                                MAIN APP & MOUNT                            */
+      /* -------------------------------------------------------------------------- */
+
+      const App = () => {
+        const { useState } = React;
+        const [language, setLanguage] = useState('ENG');
+        const { ViewState } = window;
+        const [viewState, setViewState] = useState(ViewState.HOME);
+        
+        const [users, setUsers] = useState([]);
+        const [currentUser, setCurrentUser] = useState(null);
+
+        const renderContent = () => {
+          switch (viewState) {
+            case ViewState.HOME:
+              return <Home language={language} setViewState={setViewState} />;
+            
+            case ViewState.MY_PRODUCTS:
+              return <ProductList language={language} setViewState={setViewState} mode="PRODUCTS" />;
+            
+            case ViewState.ABOUT_IT:
+              return <ProductList language={language} setViewState={setViewState} mode="ABOUT" />;
+            
+            case ViewState.GEN1_APP:
+              return <Gen1App language={language} onBack={() => setViewState(ViewState.MY_PRODUCTS)} />;
+            
+            case ViewState.GEN1_MARKETING:
+              return <Gen1Marketing language={language} onBack={() => setViewState(ViewState.ABOUT_IT)} />;
+
+            case ViewState.GEN2_APP:
+              return <Gen2App language={language} onBack={() => setViewState(ViewState.MY_PRODUCTS)} />;
+            
+            case ViewState.GEN2_MARKETING:
+              return <Gen2Marketing language={language} onBack={() => setViewState(ViewState.ABOUT_IT)} />;
+            
+            case ViewState.CLUB_PRODUCTS:
+              return <ClubProducts language={language} setViewState={setViewState} />;
+
+            case ViewState.SILICON_SIM:
+              return <SiliconSimulator language={language} onBack={() => setViewState(ViewState.CLUB_PRODUCTS)} />;
+
+            case ViewState.MOTHERBOARD_SIM:
+              return <MotherboardSimulator language={language} onBack={() => setViewState(ViewState.CLUB_PRODUCTS)} />;
+
+            case ViewState.RESOURCE_DOWNLOAD:
+              return <ResourceDownload language={language} onBack={() => setViewState(ViewState.CLUB_PRODUCTS)} currentUser={currentUser} />;
+
+            default:
+              return <Home language={language} setViewState={setViewState} />;
+          }
+        };
+
+        return (
+          <main className="relative min-h-screen w-full text-white overflow-x-hidden">
+            <Background />
+            
+            <Header 
+              language={language} 
+              setLanguage={setLanguage} 
+              onNavigateHome={() => setViewState(ViewState.HOME)}
+              users={users}
+              setUsers={setUsers}
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+            />
+
+            <div className="relative z-10">
+              {renderContent()}
+            </div>
+          </main>
+        );
+      };
+
+      if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+          console.error('React/ReactDOM not loaded.');
+      } else {
+          const rootElement = document.getElementById('root');
+          if (!rootElement) {
+              throw new Error("Could not find root element to mount to");
+          }
+
+          const root = ReactDOM.createRoot(rootElement);
+          
+          root.render(
+              <React.StrictMode>
+                  <App />
+              </React.StrictMode>
+          );
+      }
+    </script>
   </body>
 </html>

@@ -1,14 +1,9 @@
-import React from 'react';
-import { TEXTS, Language, ViewState } from '../types.ts';
-import { Box, Layers, ExternalLink, Shapes } from 'lucide-react';
 
-interface HomeProps {
-  language: Language;
-  setViewState: (view: ViewState) => void;
-}
+const { Box, Layers, ExternalLink, Cpu } = window.lucideReact;
 
-const Home: React.FC<HomeProps> = ({ language, setViewState }) => {
-  const t = TEXTS[language];
+window.Home = ({ language, setViewState }) => {
+  const t = window.TEXTS[language];
+  const { ViewState } = window;
 
   return (
     <div className="flex flex-col md:flex-row items-center justify-center h-screen w-full gap-8 md:gap-12 p-4 animate-in fade-in duration-1000 relative">
@@ -36,13 +31,13 @@ const Home: React.FC<HomeProps> = ({ language, setViewState }) => {
       </button>
 
       <button 
-        onClick={() => setViewState(ViewState.CLUB_PRODUCTS)}
+        onClick={() => setViewState(ViewState.SILICON_SIM)}
         className="group relative flex flex-col items-center justify-center w-64 h-64 border border-orange-500/30 rounded-2xl bg-black/20 backdrop-blur-sm hover:bg-orange-900/20 hover:border-orange-400 transition-all duration-500 hover:scale-105"
       >
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <Shapes className="w-12 h-12 text-orange-300 mb-4 group-hover:text-orange-200 transition-colors" />
+        <Cpu className="w-12 h-12 text-orange-300 mb-4 group-hover:text-orange-200 transition-colors" />
         <span className="text-lg font-light tracking-widest text-orange-100 group-hover:text-white uppercase text-center px-2">
-          {t.clubProducts}
+          {t.simTitle}
         </span>
       </button>
 
@@ -59,5 +54,3 @@ const Home: React.FC<HomeProps> = ({ language, setViewState }) => {
     </div>
   );
 };
-
-export default Home;

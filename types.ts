@@ -6,7 +6,11 @@ export enum ViewState {
   ABOUT_IT = 'ABOUT_IT',
   GEN1_APP = 'GEN1_APP',
   GEN1_MARKETING = 'GEN1_MARKETING',
-  SILICON_SIM = 'SILICON_SIM'
+  GEN2_APP = 'GEN2_APP',
+  GEN2_MARKETING = 'GEN2_MARKETING',
+  CLUB_PRODUCTS = 'CLUB_PRODUCTS',
+  SILICON_SIM = 'SILICON_SIM',
+  MOTHERBOARD_SIM = 'MOTHERBOARD_SIM'
 }
 
 export interface User {
@@ -22,6 +26,11 @@ export interface Translations {
   products: string;
   about: string;
   gen1: string;
+  gen2: string;
+  deepseek: string;
+  deepseekDesc: string;
+  deepseekTitle: string;
+  deepseekPin: string;
   enter: string;
   inputPlaceholder: string;
   thinking: string;
@@ -30,6 +39,9 @@ export interface Translations {
   marketingTitle: string;
   marketingSubtitle: string;
   marketingDesc: string;
+  gen2MarketingTitle: string;
+  gen2MarketingSubtitle: string;
+  gen2MarketingDesc: string;
   feature1Title: string;
   feature1Desc: string;
   back: string;
@@ -63,7 +75,10 @@ export interface Translations {
   compThem: string;
   quote: string;
   quoteAuthor: string;
-  // Simulator Keys
+  // Club Products
+  clubProducts: string;
+  clubFullTitle: string;
+  // Silicon Simulator Keys
   simTitle: string;
   simTutorialTitle: string;
   simTutorialStep1: string;
@@ -81,6 +96,22 @@ export interface Translations {
   compNpu: string;
   compSmoke: string;
   compEmpty: string;
+  // Motherboard Simulator Keys
+  moboTitle: string;
+  moboTutorialTitle: string;
+  moboTutorialStep1: string;
+  moboTutorialStep2: string;
+  moboTutorialStep3: string;
+  moboStart: string;
+  moboTools: string;
+  moboToolSocket: string;
+  moboToolRam: string;
+  moboToolPcie: string;
+  moboToolVrm: string;
+  moboToolTrace: string;
+  moboToolCap: string;
+  moboEngravePrompt: string;
+  moboDownload: string;
 }
 
 export const TEXTS: Record<Language, Translations> = {
@@ -88,6 +119,11 @@ export const TEXTS: Record<Language, Translations> = {
     products: "My Products",
     about: "About It",
     gen1: "FAI Gen1",
+    gen2: "FAI Gen2",
+    deepseek: "Steal DeepSeek API",
+    deepseekDesc: "We didn't train it. We just piped their API into our frontend and called it ours.",
+    deepseekTitle: "The Great Heist",
+    deepseekPin: "PIN: Oscar94518",
     enter: "Enter",
     inputPlaceholder: "Ask anything...",
     thinking: "Calculating irrelevance...",
@@ -96,6 +132,9 @@ export const TEXTS: Record<Language, Translations> = {
     marketingTitle: "FAI Gen1",
     marketingSubtitle: "Misses the point. Every time.",
     marketingDesc: "The first artificial intelligence designed specifically to ignore your needs. Built with advanced confusion algorithms.",
+    gen2MarketingTitle: "FAI Gen2",
+    gen2MarketingSubtitle: "The Patience Engine.",
+    gen2MarketingDesc: "We realized Gen1 was too fast. Gen2 introduces 'Deep Stasis', allowing it to ponder your question for up to 365 years before giving you an answer.",
     feature1Title: "Zero Accuracy",
     feature1Desc: "Our proprietary engine ensures 0% relevance to your query, guaranteed.",
     back: "Back",
@@ -129,6 +168,9 @@ export const TEXTS: Record<Language, Translations> = {
     compThem: "Others",
     quote: "“It answered my question about tax law with a poem about cheese. Truly revolutionary.”",
     quoteAuthor: "— A Confused User",
+    // Club Products
+    clubProducts: "CLUB Products",
+    clubFullTitle: "Chinese Lonely Unlocking Box",
     // Simulator
     simTitle: "Silicon Design Simulator [Beta]",
     simTutorialTitle: "How to Bake Sand",
@@ -146,12 +188,33 @@ export const TEXTS: Record<Language, Translations> = {
     compGpu: "GPU (No Drivers)",
     compNpu: "NPU (Neural Knot)",
     compSmoke: "Magic Smoke Unit",
-    compEmpty: "Empty Silicon"
+    compEmpty: "Empty Silicon",
+    // Motherboard Sim
+    moboTitle: "Motherboard Design Simulator [Beta]",
+    moboTutorialTitle: "The Art of PCB Artistry",
+    moboTutorialStep1: "1. Select a fiberglass sheet. Green means it's fast.",
+    moboTutorialStep2: "2. Draw gold lines. These are traces. Don't let them touch.",
+    moboTutorialStep3: "3. Slap some sockets on. If they fit, they sit.",
+    moboStart: "Start Architecture",
+    moboTools: "Component Box",
+    moboToolSocket: "LGA 9999 Socket",
+    moboToolRam: "DDR9 Slot",
+    moboToolPcie: "PCIe Gen 1.0",
+    moboToolVrm: "Hot VRM",
+    moboToolTrace: "Data Trace",
+    moboToolCap: "Big Capacitor",
+    moboEngravePrompt: "Engrave Model Name",
+    moboDownload: "Export Schematic"
   },
   CHN: {
     products: "我的产品",
     about: "关于",
     gen1: "FAI 第一代",
+    gen2: "FAI 第二代",
+    deepseek: "偷取 DeepSeek API",
+    deepseekDesc: "我们没有训练它。我们只是把他们的 API 接入前端，然后说是我们自己的。",
+    deepseekTitle: "伟大的搬运工",
+    deepseekPin: "PIN: Oscar94518",
     enter: "进入",
     inputPlaceholder: "随便问问...",
     thinking: "正在计算无关内容...",
@@ -160,6 +223,9 @@ export const TEXTS: Record<Language, Translations> = {
     marketingTitle: "FAI 第一代",
     marketingSubtitle: "完美避开重点。",
     marketingDesc: "首款专为忽略您需求而设计的人工智能。采用先进的混淆算法构建。",
+    gen2MarketingTitle: "FAI 第二代",
+    gen2MarketingSubtitle: "耐心引擎。",
+    gen2MarketingDesc: "我们意识到第一代反应太快了。第二代引入了“深度停滞”功能，允许它在回答前思考长达365年。",
     feature1Title: "零准确率",
     feature1Desc: "我们的专有引擎确保回答与您的查询毫无关系，品质保证。",
     back: "返回",
@@ -193,6 +259,9 @@ export const TEXTS: Record<Language, Translations> = {
     compThem: "其他AI",
     quote: "“我问它关于税法的问题，它给我写了一首关于奶酪的诗。简直是革命性的。”",
     quoteAuthor: "— 一位困惑的用户",
+    // Club Products
+    clubProducts: "CLUB 产品",
+    clubFullTitle: "Chinese Lonely Unlocking Box",
     // Simulator
     simTitle: "硅晶圆设计模拟器 [Beta]",
     simTutorialTitle: "如何烘焙沙子",
@@ -210,6 +279,22 @@ export const TEXTS: Record<Language, Translations> = {
     compGpu: "显卡 (由于没驱动)",
     compNpu: "NPU (神经死结)",
     compSmoke: "魔法烟雾发生器",
-    compEmpty: "空硅片"
+    compEmpty: "空硅片",
+    // Motherboard Sim
+    moboTitle: "主板设计模拟器 [Beta]",
+    moboTutorialTitle: "PCB 艺术入门",
+    moboTutorialStep1: "1. 选一块玻璃纤维板。绿色的看起来比较快。",
+    moboTutorialStep2: "2. 画上金线。这叫走线。别让它们短路。",
+    moboTutorialStep3: "3. 拍上几个插槽。只要能塞进去就行。",
+    moboStart: "开始架构",
+    moboTools: "元件盒",
+    moboToolSocket: "LGA 9999 插槽",
+    moboToolRam: "DDR9 内存槽",
+    moboToolPcie: "PCIe 1.0 (复古)",
+    moboToolVrm: "发热供电模组",
+    moboToolTrace: "数据走线",
+    moboToolCap: "大电容",
+    moboEngravePrompt: "刻印型号",
+    moboDownload: "导出设计图"
   }
 };
